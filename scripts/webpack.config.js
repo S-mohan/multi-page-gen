@@ -8,6 +8,7 @@ const { seekViewPath } = require("./entry");
 
 const env = process.env.NODE_ENV || 'development';
 const isDev = env === 'development';
+
 const webpackEntries = {};
 const webpackHtmlPlugins = [];
 
@@ -47,7 +48,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.scss$/,
+        test: /\.s?css$/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
@@ -117,8 +118,21 @@ module.exports = {
     }),
   ],
   devtool: 'cheap-module-source-map',
-  watchOptions: {
-    ignored: ['**/dist', '**/scripts', '**/node_modules'],
+  devServer: {
+    host: '0.0.0.0',
+    static: {
+      directory: path.join(__dirname, '../dist'),
+    },
+    compress: true,
+    port: 9000,
+    hot: true,
+    open: true,
+    watchFiles: {
+      paths: ['../src/**/*'],
+      options: {
+        usePolling: false,
+      },
+    },
   },
 }
 
